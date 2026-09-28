@@ -3,12 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<meta name="theme-color" content="#2563eb">
+<meta name="theme-color" content="#1e3a5f">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="自我診療">
 <title>自我診療工具箱</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🩺</text></svg>">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="stylesheet" href="common.css">
 <style>
 .home-hero{text-align:center;padding:28px 0 18px}
@@ -40,6 +42,7 @@
     <p>常見日常疾病 × 中西藥 × 藥典 快速查詢</p>
   </div>
 
+  <button id="installBtn" onclick="installApp()" style="display:none;width:100%;margin-bottom:12px;padding:12px;border:none;border-radius:12px;background:var(--navy);color:var(--gold);font-size:15px;font-weight:600;cursor:pointer">🖥️ 安裝成桌面 App</button>
   <input id="q" class="search" type="search" placeholder="搜尋症狀、疾病或藥名（例：咳嗽、普拿疼、葛根湯）" autocomplete="off">
   <div id="results" class="results"></div>
 

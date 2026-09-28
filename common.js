@@ -32,3 +32,9 @@ function rankFor(list,did){
 }
 function pregnancyFlag(no){ return /孕婦(禁用|忌用|忌服)/.test(no)?"孕婦禁用":/孕婦慎用/.test(no)?"孕婦慎用":""; }
 const CP_SRC='資料來源：《中國藥典》2015年版一部，經 OCR 擷取並轉為繁體，可能有少數誤字；大陸藥典收載品項在台灣不一定有許可證，購買前請確認衛福部中藥許可證字號。';
+
+// 安裝成桌面／手機 App（PWA）
+if("serviceWorker" in navigator){ window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{})); }
+let _installEvt=null;
+window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();_installEvt=e;const b=document.getElementById("installBtn");if(b)b.style.display="";});
+function installApp(){ if(_installEvt){_installEvt.prompt();_installEvt=null;document.getElementById("installBtn").style.display="none";} }
