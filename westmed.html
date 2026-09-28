@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#2563eb">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>常用西藥｜自我診療工具箱</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💊</text></svg>">
+<link rel="stylesheet" href="common.css">
+</head>
+<body>
+<div class="wrap">
+  <div class="page-title"><span class="ico">💊</span><div><h1>常用西藥</h1><p>藥局可購得之成藥、指示藥（成人一般用量）</p></div></div>
+  <input id="q" class="search" type="search" placeholder="搜尋學名、商品名或用途（例：普拿疼、鼻塞）" autocomplete="off">
+  <div class="chips" id="chips"></div>
+  <div class="count" id="cnt"></div>
+  <div id="list"></div>
+  <div class="note-box">
+    <b>藥品分級：</b>「成藥」可於一般藥局、藥妝店自由購買；「指示藥」需經藥師指導購買；「處方藥」須醫師處方。<br>
+    <b>重複用藥提醒：</b>綜合感冒藥多已含乙醯胺酚（普拿疼成分），勿同時服用；兩種以上 NSAID（布洛芬、那普洛先、阿斯匹靈）不可併用。
+  </div>
+  <p class="disclaimer" id="disc"></p>
+</div>
+
+<script src="data_west.js"></script>
+<script src="data_tcm.js"></script>
+<script src="data_disease.js"></script>
+<script src="common.js"></script>
+<script>
+document.getElementById("disc").innerHTML=DISCLAIMER;
+const GROUPS=[
+  ["止痛退燒",m=>/止痛|NSAID/.test(m.cls)&&!/外用/.test(m.cls)],
+  ["抗過敏",m=>/抗組織胺/.test(m.cls)],
+  ["感冒咳嗽",m=>/鼻|咳|痰|感冒/.test(m.cls)],
+  ["腸胃",m=>/制酸|胃酸|PPI|脹氣|瀉|整腸|電解質|解痙|暈動/.test(m.cls)],
+  ["外用",m=>/外用|傷口|燙傷|口腔|痔瘡|眼用/.test(m.cls)],
+];
+const groupOf=m=>(GROUPS.find(([,f])=>f(m))||["其他"])[0];
+let g="全部",kw="";
+const focus=qs("id");
+const chips=document.getElementById("chips");
+chips.innerHTML=["全部",...GROUPS.map(x=>x[0])].map(c=>`<button class="chip ${c===g?"on":""}" data-c="${c}">${c}</button>`).join("");
+chips.addEventListener("click",e=>{const b=e.target.closest(".chip");if(!b)return;g=b.dataset.c;
+  chips.querySelectorAll(".chip").forEach(x=>x.classList.toggle("on",x===b));draw();});
+const q=document.getElementById("q");q.addEventListener("input",()=>{kw=q.value;draw();});
+
+function draw(){
+  const k=norm(kw.trim());
+  const list=WEST_MEDS.filter(m=>(g==="全部"||groupOf(m)===g)&&(!k||norm(m.name+m.en+m.brand+m.use+m.cls).includes(k)));
+  document.getElementById("cnt").textContent=`共 ${list.length} 項`;
+  document.getElementById("list").innerHTML=list.length?list.map(m=>{
+    const ds=diseasesUsingWest(m.id);
+    return `<details class="item ${m.id===focus?"hl":""}" id="m-${m.id}" ${m.id===focus?"open":""}>
+      <summary><div><div class="t1">${esc(m.name)} ${m.tag.map(t=>`<span class="tag ${t==="處方藥"?"rx":""}">${t}</span>`).join("")}</div>
+        <div class="t2">${esc(m.en)}｜${esc(m.cls)}</div></div></summary>
+      <div class="body"><dl class="kv">
+        <dt>常見品牌</dt><dd>${esc(m.brand)}</dd>
+        <dt>用途</dt><dd>${esc(m.use)}</dd>
+        <dt>成人用量</dt><dd>${esc(m.dose)}</dd>
+        <dt>注意</dt><dd style="color:var(--red)">${esc(m.caution)}</dd>
+        ${ds.length?`<dt>相關疾病</dt><dd><div class="links">${ds.map(d=>`<a href="disease.html?id=${d.id}">${d.icon} ${esc(d.name)}</a>`).join("")}</div></dd>`:""}
+      </dl></div></details>`;}).join(""):`<div class="empty">找不到符合的藥品</div>`;
+}
+draw();
+if(focus){const el=document.getElementById("m-"+focus);if(el)setTimeout(()=>el.scrollIntoView({behavior:"smooth",block:"center"}),50);}
+</script>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#2563eb">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>用藥知識｜自我診療工具箱</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>">
+<link rel="stylesheet" href="common.css">
+<style>
+.toc{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.toc a{font-size:13px;background:#fff;border:1px solid var(--line);padding:4px 10px;border-radius:999px}
+table.t{width:100%;border-collapse:collapse;font-size:13px;margin-top:6px}
+table.t th,table.t td{border:1px solid var(--line);padding:6px 7px;vertical-align:top;text-align:left}
+table.t th{background:var(--primary-l);color:var(--navy);white-space:nowrap}
+.tw{overflow-x:auto}
+.pill{display:inline-block;font-size:12px;padding:2px 8px;border-radius:8px;margin:2px;background:var(--bg)}
+.pill.r{background:var(--red-l);color:var(--red)}
+.pill.a{background:var(--amber-l);color:var(--amber)}
+.card h3{font-size:14px;margin:10px 0 4px;color:var(--primary-d)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="page-title"><span class="ico">📖</span><div><h1>用藥知識</h1><p>整理自藥學／中藥課程共筆與《中國藥典》</p></div></div>
+  <div class="toc">
+    <a href="#jun">君臣佐使</a><a href="#cls">方劑分類</a><a href="#biao">解表劑比較</a><a href="#form">中藥劑型</a>
+    <a href="#nsaid">止痛藥安全</a><a href="#tcmsafe">中藥安全</a><a href="#mix">中西藥併用</a><a href="#preg">孕婦禁慎用</a><a href="#tox">毒性藥材</a>
+  </div>
+
+  <div class="card" id="jun"><h2>🏛️ 方劑組成：君臣佐使</h2>
+    <p style="font-size:14px">一個方劑不是藥材的隨意堆疊，而是依「主、輔、佐、使」原則組成（《黃帝內經》奠定此理論）。</p>
+    <div class="tw"><table class="t">
+      <tr><th>角色</th><th>作用</th><th>以麻黃湯為例</th></tr>
+      <tr><td>君（主藥）</td><td>針對病因或主證，起主要治療作用</td><td>麻黃：發汗散寒</td></tr>
+      <tr><td>臣（輔藥）</td><td>協助主藥加強療效</td><td>桂枝：發散風寒，助麻黃發汗</td></tr>
+      <tr><td>佐</td><td>①治兼證 ②制約主藥的毒副作用 ③反佐（病勢拒藥時從治）</td><td>杏仁：降氣平喘</td></tr>
+      <tr><td>使</td><td>①引經：引藥直達病處 ②調和諸藥 ③矯味</td><td>炙甘草：調和諸藥</td></tr>
+    </table></div>
+  </div>
+
+  <div class="card" id="cls"><h2>🗂️ 方劑分類（依治法）</h2>
+    <div class="tw"><table class="t">
+      <tr><th>類別</th><th>治法與適用</th><th>常見方（點選查看）</th></tr>
+      <tr><td>解表劑</td><td>汗法。辛溫解表治風寒、辛涼解表治風熱；以全身微汗為度，不可過汗傷津</td><td><a href="tcm.html?id=guizhi">桂枝湯</a>、<a href="tcm.html?id=gegen">葛根湯</a>、<a href="tcm.html?id=yinqiao">銀翹散</a></td></tr>
+      <tr><td>瀉下劑</td><td>寒下、潤下、逐水；治裏實證，<b>得效即止</b></td><td><a href="tcm.html?id=maziren">麻子仁丸</a>、<a href="tcm.html?id=runchang">潤腸湯</a></td></tr>
+      <tr><td>和解劑</td><td>和解少陽、調和肝脾、調和腸胃</td><td><a href="tcm.html?id=xiaochaihu">小柴胡湯</a>、<a href="tcm.html?id=jiaweixiaoyao">加味逍遙散</a>、<a href="tcm.html?id=banxiaxiexin">半夏瀉心湯</a></td></tr>
+      <tr><td>溫裏劑</td><td>溫中祛寒、回陽救逆、溫經散寒；治裏寒證，得效即止</td><td><a href="tcm.html?id=anzhong">安中散</a>、<a href="tcm.html?id=wenjing">溫經湯</a></td></tr>
+      <tr><td>清熱劑</td><td>清氣分熱、清熱解毒、清虛熱、清臟腑熱；以寒涼藥為主</td><td><a href="tcm.html?id=huanglianjiedu">黃連解毒湯</a>、<a href="tcm.html?id=qingwei">清胃散</a>、<a href="tcm.html?id=daochi">導赤散</a></td></tr>
+      <tr><td>補益劑</td><td>補氣、補血、補陰、補陽；治各種虛證</td><td><a href="tcm.html?id=siwu">四物湯</a>、<a href="tcm.html?id=xiangsha">香砂六君子湯</a>、<a href="tcm.html?id=guipi">歸脾湯</a></td></tr>
+      <tr><td>消導劑</td><td>消食導滯、消痞化積；治食積脘痞</td><td><a href="tcm.html?id=baohe">保和丸</a></td></tr>
+      <tr><td>祛濕劑</td><td>芳香化濕、利水滲濕、祛風勝濕</td><td><a href="tcm.html?id=huoxiang">藿香正氣散</a>、<a href="tcm.html?id=wuling">五苓散</a>、<a href="tcm.html?id=duhuo">獨活寄生湯</a></td></tr>
+      <tr><td>理血劑</td><td>活血化瘀、止血</td><td><a href="tcm.html?id=shujing">疏經活血湯</a>、<a href="tcm.html?id=yizi">乙字湯</a></td></tr>
+      <tr><td>安神劑</td><td>養心安神、重鎮安神</td><td><a href="tcm.html?id=suanzaoren">酸棗仁湯</a>、<a href="tcm.html?id=tianwang">天王補心丹</a></td></tr>
+      <tr><td>治風劑</td><td>疏散外風、平息內風</td><td><a href="tcm.html?id=chuanxiong">川芎茶調散</a>、<a href="tcm.html?id=xiaofeng">消風散</a></td></tr>
+    </table></div>
+  </div>
+
+  <div class="card" id="biao"><h2>🤧 辛溫解表劑怎麼選</h2>
+    <div class="tw"><table class="t">
+      <tr><th>方劑</th><th>適用證型</th><th>主藥與重點</th></tr>
+      <tr><td><a href="tcm.html?id=mahuang">麻黃湯</a></td><td>外感風寒<b>表實證</b>：怕冷、無汗、身痛（體質壯實）</td><td>麻黃發汗散寒（含麻黃鹼，興奮交感神經），杏仁降氣平喘</td></tr>
+      <tr><td><a href="tcm.html?id=guizhi">桂枝湯</a></td><td>外感風寒<b>表虛證</b>：怕風、自汗（體虛者）</td><td>桂枝發汗解熱、白芍調控發汗，生薑健胃、大棗和營</td></tr>
+      <tr><td>九味羌活湯</td><td>風寒濕外感兼裏熱：後頭痛、身重</td><td>羌活治後頭痛；川芎、白芷治頭痛；生地、黃芩清熱</td></tr>
+      <tr><td><a href="tcm.html?id=xiaoqinglong">小青龍湯</a></td><td>外感風寒、內停水飲：痰白清稀、咳喘</td><td>麻黃宣肺平喘；五味子斂肺止咳，防辛散太過</td></tr>
+      <tr><td>人參敗毒散</td><td>體虛外感風寒濕：怕冷無汗、頭痛</td><td>羌活走上、獨活走下；人參、茯苓、甘草益氣</td></tr>
+      <tr><td><a href="tcm.html?id=jingfang">荊防敗毒散</a></td><td>風寒濕表證、瘡瘍初起兼表證</td><td>荊芥、防風、羌活、獨活散風寒祛風濕</td></tr>
+    </table></div>
+  </div>
+
+  <div class="card" id="form"><h2>💊 中藥劑型與優缺點</h2>
+    <div class="tw"><table class="t">
+      <tr><th>劑型</th><th>優點</th><th>缺點</th></tr>
+      <tr><td>湯劑</td><td>吸收快、藥效迅速，可靈活加減</td><td>耗藥材、不便攜帶保存，部分成分不易煎出或會揮發，口感差</td></tr>
+      <tr><td>散劑</td><td>吸收較快、節省藥材、攜帶方便</td><td>口感差、難以減味</td></tr>
+      <tr><td>丸劑</td><td>節省藥材、便於服用，藥效緩而持久</td><td>不便加減變化</td></tr>
+      <tr><td>酒劑</td><td>服用量少、吸收快，可長期保存</td><td>適用面窄；高血壓、胃潰瘍者忌服</td></tr>
+      <tr><td>膠劑</td><td>富含蛋白質、胺基酸，多作補益</td><td>腥味較重</td></tr>
+      <tr><td>膏滋</td><td>量少味甜、便於服用與儲存，作用穩定持久</td><td>不適合含揮發性或不耐熱藥材</td></tr>
+      <tr><td>顆粒（沖服劑）</td><td>即「科學中藥」常見型態，沖泡方便、劑量穩定</td><td>含糖或賦形劑，糖尿病者留意</td></tr>
+    </table></div>
+    <h3>丸劑種類</h3>
+    <p style="font-size:13px">蜜丸（煉蜜為黏合劑）、水丸（水／酒／醋泛丸，顆粒小）、水蜜丸、糊丸（米糊麵糊，崩解慢）、蠟丸（蜂蠟，緩釋）、濃縮丸、滴丸（基質熔化滴入冷凝液製成，起效快）。</p>
+    <h3>科學中藥怎麼吃</h3>
+    <p style="font-size:13px">台灣健保與藥局的科學中藥多為濃縮顆粒或粉末。一般成人每次 3–5 g、每日 3 次，溫開水送服或沖泡；與西藥間隔 1–2 小時。不同廠牌「濃縮比」不同，換廠牌時劑量可能需要調整。</p>
+  </div>
+
+  <div class="card" id="nsaid"><h2>🩹 止痛藥（NSAID）安全重點</h2>
+    <ul style="font-size:14px">
+      <li><b>氣喘患者慎用 NSAID：</b>抑制 COX 後，花生四烯酸轉走 Lipoxygenase 路徑，白三烯增加，可能誘發支氣管收縮（阿斯匹靈氣喘）。</li>
+      <li><b>阿斯匹靈</b>具止痛、消炎、解熱、抗血小板四種作用；抗血小板效果持續 8–10 天，手術或拔牙前需告知醫師。18 歲以下發燒勿用。</li>
+      <li><b>傷胃：</b>抑制 COX-1 會減少胃黏膜保護，飯後服用；長期使用可併用胃藥（如 PPI）。</li>
+      <li><b>傷腎：</b>腎功能不佳者避免長期使用 NSAID，脫水時更要小心。</li>
+      <li><b>COX-2 選擇性抑制劑</b>（如 celecoxib）腸胃副作用約少一半、不影響血小板，但心血管風險較高。</li>
+      <li>各種 NSAID 胃腸副作用：indomethacin 較大；naproxen、ibuprofen 相對較小。</li>
+      <li><b>痛風急性發作</b>可用 NSAID 或秋水仙素，降尿酸藥（allopurinol）要在急性期過後由醫師開始使用。</li>
+      <li><b>乙醯胺酚</b>不傷胃、不影響血小板，但過量傷肝，勿與綜合感冒藥重複、勿與酒併用。</li>
+    </ul>
+  </div>
+
+  <div class="card" id="tcmsafe"><h2>🌿 中藥安全重點</h2>
+    <h3>麻黃（葛根湯、麻黃湯、小青龍湯、麻杏甘石湯等含之）</h3>
+    <ul style="font-size:14px">
+      <li>結構類似腎上腺素，會<b>升高血壓、加快心跳</b>：高血壓、心臟病、糖尿病、青光眼、甲狀腺亢進、腎衰竭者不宜。</li>
+      <li>手術前不可使用，可能造成心律不整。</li>
+      <li>麻黃地上部分發汗，麻黃根反而止汗。</li>
+    </ul>
+    <h3>發汗與升提</h3>
+    <ul style="font-size:14px">
+      <li>解表藥以全身微汗為度，過汗會傷津傷陰。</li>
+      <li>高血壓（肝陽上亢）或頭面部出血者，不宜用升提發汗藥（如升麻），恐使血壓更高、出血更甚。</li>
+    </ul>
+    <h3>其他常見提醒</h3>
+    <ul style="font-size:14px">
+      <li><b>桂枝</b>會使子宮充血，孕婦慎用。</li>
+      <li><b>甘草</b>含甘草甜素（類皮質素作用），長期大量易水腫、低血鉀、血壓上升。</li>
+      <li><b>大黃</b>瀉下作用強，孕婦、哺乳者慎用，不宜長期通便。</li>
+      <li>苦寒清熱藥（黃連、黃芩、黃柏、梔子）不宜久服，脾胃虛寒易腹瀉者慎用。</li>
+      <li>服中藥期間一般忌生冷、油膩、辛辣；感冒發燒時先停補藥。</li>
+    </ul>
+  </div>
+
+  <div class="card" id="mix"><h2>🔄 中西藥併用注意</h2>
+    <div class="tw"><table class="t">
+      <tr><th>組合</th><th>可能問題</th></tr>
+      <tr><td>抗凝血／抗血小板藥（warfarin、阿斯匹靈、clopidogrel）＋ 當歸、丹參、川芎、紅花、銀杏</td><td>增加出血風險</td></tr>
+      <tr><td>利尿劑、類固醇 ＋ 甘草（大量或長期）</td><td>低血鉀、水腫</td></tr>
+      <tr><td>降血壓藥、心臟藥 ＋ 麻黃</td><td>血壓升高、心悸，抵銷藥效</td></tr>
+      <tr><td>四環素、quinolone 類抗生素、甲狀腺素 ＋ 含鈣鎂鐵的礦物藥（石膏、牡蠣、龍骨、瓦楞子）</td><td>形成螯合物，降低吸收，需間隔 2 小時以上</td></tr>
+      <tr><td>降血糖藥 ＋ 人參、黃耆等補氣藥</td><td>可能影響血糖控制，需監測</td></tr>
+      <tr><td>鎮靜安眠藥 ＋ 酸棗仁、遠志等安神藥</td><td>加強嗜睡</td></tr>
+    </table></div>
+    <div class="note-box">一般原則：中藥與西藥間隔 1–2 小時服用；就醫時主動告知正在服用的中藥與保健品。</div>
+  </div>
+
+  <div class="card" id="preg"><h2>🤰 藥典註明孕婦禁用／慎用的藥材</h2>
+    <div id="pregList"></div>
+  </div>
+
+  <div class="card" id="tox"><h2>☠️ 毒性／作用峻烈藥材</h2>
+    <p style="font-size:14px">下列藥材有毒性或作用峻烈，含這些成分的中成藥在本工具中預設隱藏，須由醫師處方使用。台灣對含朱砂、雄黃等重金屬礦物藥的製劑管制較嚴，購買前請確認衛福部許可證。</p>
+    <div id="toxList" style="margin-top:6px"></div>
+  </div>
+
+  <p class="note-box">資料整理自：藥學／中藥相關課程共筆（方劑學、中醫藥物學、藥理學、中成藥商品學、中藥調劑學）與《中國藥典》2015 年版一部。</p>
+  <p class="disclaimer" id="disc"></p>
+</div>
+
+<script src="data_west.js"></script>
+<script src="data_tcm.js"></script>
+<script src="data_disease.js"></script>
+<script src="data_herb.js"></script>
+<script src="data_cpm.js"></script>
+<script src="common.js"></script>
+<script>
+document.getElementById("disc").innerHTML=DISCLAIMER;
+const ban=HERBS.filter(h=>/孕婦(禁用|忌用|忌服)/.test(h.no)), care=HERBS.filter(h=>/孕婦慎用/.test(h.no)&&!ban.includes(h));
+const pl=a=>a.map(h=>`<a class="pill" href="herbs.html?id=${h.id}">${esc(h.n)}</a>`).join("");
+document.getElementById("pregList").innerHTML=
+  `<h3 style="color:var(--red)">禁用（${ban.length}）</h3><div>${pl(ban).replace(/class="pill"/g,'class="pill r"')}</div>
+   <h3 style="color:var(--amber)">慎用（${care.length}）</h3><div>${pl(care).replace(/class="pill"/g,'class="pill a"')}</div>
+   <div class="note-box">另有 ${CPM.filter(r=>/孕婦/.test(r.no)).length} 種中成藥在藥典中標註孕婦禁用或慎用，查詢時請留意「注意」欄。</div>`;
+const TOX=["硃砂","雄黃","巴豆","馬錢子","川烏","草烏","附子","蟾酥","斑蝥","輕粉","紅粉","鉛丹","洋金花","天仙子","鬧羊花","生半夏","生天南星","千金子","甘遂","京大戟","芫花","商陸","牽牛子","細辛","蒼耳子","罌粟殼","全蠍","蜈蚣","土鱉蟲","水蛭","麝香"];
+document.getElementById("toxList").innerHTML=TOX.map(t=>{
+  const h=HERBS.find(x=>x.n.startsWith(t)); const n=CPM.filter(r=>r.tx.includes(t)).length;
+  return h?`<a class="pill r" href="herbs.html?id=${h.id}">${t}${n?`（${n}方）`:""}</a>`:`<span class="pill r">${t}${n?`（${n}方）`:""}</span>`;}).join("");
+</script>
+</body>
+</html>

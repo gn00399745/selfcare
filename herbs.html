@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#2563eb">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>中藥材（藥典）｜自我診療工具箱</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍃</text></svg>">
+<link rel="stylesheet" href="common.css">
+</head>
+<body>
+<div class="wrap">
+  <div class="page-title"><span class="ico">🍃</span><div><h1>中藥材（藥典）</h1><p>《中國藥典》2015 收載藥材與飲片：性味歸經、功能主治、用量</p></div></div>
+  <input id="q" class="search" type="search" placeholder="搜尋藥材名、功效或症狀（例：菊花、清熱、失眠）" autocomplete="off">
+  <div class="chips" id="chips"></div>
+  <div id="dfilter" class="note-box" style="display:none;background:var(--primary-l);color:var(--primary-d)"></div>
+  <label style="font-size:13px;color:var(--muted);display:flex;gap:6px;align-items:center;margin:4px 2px"><input type="checkbox" id="tox">隱藏含毒性／峻烈藥材</label>
+  <div class="count" id="cnt"></div>
+  <div id="list"></div>
+  <button id="more" class="chip" style="display:block;margin:10px auto;padding:8px 24px">載入更多</button>
+  <div class="note-box"><b>用量說明：</b>藥典用量為成人一日煎服量（飲片），「先煎、後下、包煎、烊化」為特殊煎法。單味藥材也需辨證，體質不合反而不適。</div>
+  <p class="note-box" id="src"></p>
+  <p class="disclaimer" id="disc"></p>
+</div>
+<script src="data_west.js"></script>
+<script src="data_tcm.js"></script>
+<script src="data_disease.js"></script>
+<script src="data_herb.js"></script>
+<script src="common.js"></script>
+<script src="pharm.js"></script>
+<script>
+pharmPage({data:HERBS,cats:["解表","清熱","瀉下通便","祛風濕","化濕利水","溫裏","理氣","消食","止血","活血化瘀","化痰止咳","安神","平肝","補虛","收澀","外用殺蟲","其他"],kind:"herb"});
+</script>
+</body>
+</html>

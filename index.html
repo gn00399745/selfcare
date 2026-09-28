@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#2563eb">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="自我診療">
+<title>自我診療工具箱</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🩺</text></svg>">
+<link rel="stylesheet" href="common.css">
+<style>
+.home-hero{text-align:center;padding:28px 0 18px}
+.home-hero .logo{font-size:56px}
+.home-hero h1{font-size:28px;color:var(--navy);margin-top:4px}
+.home-hero p{color:var(--muted);font-size:14px}
+.tools{display:grid;gap:12px;margin-top:18px}
+.tool{display:flex;align-items:center;gap:14px;background:#fff;border-radius:16px;padding:18px;box-shadow:0 2px 8px rgba(0,0,0,.06);
+  border:1.5px solid transparent;transition:.15s;color:var(--text)}
+.tool:hover{border-color:var(--primary);transform:translateY(-2px)}
+.tool .ic{font-size:34px;width:56px;height:56px;border-radius:14px;background:var(--primary-l);display:flex;align-items:center;justify-content:center;flex:none}
+.tool .tt{font-weight:700;font-size:17px}
+.tool .ds{font-size:13px;color:var(--muted)}
+.tool .fn{font-size:11px;color:#94a3b8;font-family:ui-monospace,monospace}
+.results{margin-top:8px}
+.res{display:flex;gap:10px;align-items:center;background:#fff;border-radius:10px;padding:10px 12px;margin-bottom:6px;color:var(--text)}
+.res .k{font-size:11px;padding:1px 7px;border-radius:6px;flex:none}
+.k-d{background:var(--primary-l);color:var(--primary-d)}.k-w{background:var(--amber-l);color:var(--amber)}.k-t{background:var(--green-l);color:var(--green)}
+.res .s{font-size:12px;color:var(--muted)}
+.emerg{background:var(--red-l);border-radius:14px;padding:14px 16px;margin-top:18px;font-size:14px}
+.emerg b{color:var(--red)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="home-hero">
+    <div class="logo">🩺</div>
+    <h1>自我診療工具箱</h1>
+    <p>常見日常疾病 × 中西藥 × 藥典 快速查詢</p>
+  </div>
+
+  <input id="q" class="search" type="search" placeholder="搜尋症狀、疾病或藥名（例：咳嗽、普拿疼、葛根湯）" autocomplete="off">
+  <div id="results" class="results"></div>
+
+  <div class="tools" id="tools">
+    <a class="tool" href="disease.html">
+      <div class="ic">🤒</div>
+      <div><div class="tt">常見疾病速查</div><div class="ds">症狀 → 居家處理 → 西藥 → 中醫辨證 → 就醫警訊</div><div class="fn">disease.html</div></div>
+    </a>
+    <a class="tool" href="westmed.html">
+      <div class="ic">💊</div>
+      <div><div class="tt">常用西藥</div><div class="ds">成藥／指示藥的用途、成人劑量、注意事項</div><div class="fn">westmed.html</div></div>
+    </a>
+    <a class="tool" href="tcm.html">
+      <div class="ic">🌿</div>
+      <div><div class="tt">常用方劑</div><div class="ds">台灣常見科學中藥方劑的組成、功效、適用證型</div><div class="fn">tcm.html</div></div>
+    </a>
+    <a class="tool" href="cpm.html">
+      <div class="ic">📦</div>
+      <div><div class="tt">中成藥（藥典）</div><div class="ds" id="cpmN">《中國藥典》成方製劑，依疾病系統分類</div><div class="fn">cpm.html</div></div>
+    </a>
+    <a class="tool" href="herbs.html">
+      <div class="ic">🍃</div>
+      <div><div class="tt">中藥材（藥典）</div><div class="ds" id="herbN">單味藥材的性味歸經、功能主治、用量</div><div class="fn">herbs.html</div></div>
+    </a>
+    <a class="tool" href="knowledge.html">
+      <div class="ic">📖</div>
+      <div><div class="tt">用藥知識</div><div class="ds">方劑分類、劑型、中西藥安全觀念、孕婦與毒性藥材</div><div class="fn">knowledge.html</div></div>
+    </a>
+  </div>
+
+  <div class="emerg">
+    <b>🚨 以下狀況請立即就醫或撥 119：</b>
+    呼吸困難、胸痛冒冷汗、意識不清、突發劇烈頭痛、單側肢體無力或口齒不清、嘴唇喉嚨腫脹（過敏性休克）、大量出血、吐血或解黑便、高燒合併頸部僵硬。
+  </div>
+
+  <p class="disclaimer" id="disc"></p>
+</div>
+
+<script src="data_west.js"></script>
+<script src="data_tcm.js"></script>
+<script src="data_disease.js"></script>
+<script src="data_cpm.js"></script>
+<script src="data_herb.js"></script>
+<script src="common.js"></script>
+<script>
+document.getElementById("disc").innerHTML=DISCLAIMER;
+document.getElementById("cpmN").textContent=`《中國藥典》收載 ${CPM.length} 種成方製劑，依疾病系統分類`;
+document.getElementById("herbN").textContent=`${HERBS.length} 種藥材與飲片的性味歸經、功能主治、用量`;
+const q=document.getElementById("q"),box=document.getElementById("results"),tools=document.getElementById("tools");
+q.addEventListener("input",()=>{
+  const k=norm(q.value.trim());
+  if(!k){box.innerHTML="";tools.style.display="";return;}
+  tools.style.display="none";
+  const r=[];
+  DISEASES.forEach(d=>{ if(norm(d.name+d.symptom+d.cat).includes(k)) r.push(`<a class="res" href="disease.html?id=${d.id}"><span class="k k-d">疾病</span><div><div>${d.icon} ${esc(d.name)}</div><div class="s">${esc(d.symptom.slice(0,40))}…</div></div></a>`)});
+  WEST_MEDS.forEach(m=>{ if(norm(m.name+m.en+m.brand+m.use+m.cls).includes(k)) r.push(`<a class="res" href="westmed.html?id=${m.id}"><span class="k k-w">西藥</span><div><div>${esc(m.name)} <span class="s">${esc(m.en)}</span></div><div class="s">${esc(m.brand)}</div></div></a>`)});
+  TCM_MEDS.forEach(m=>{ if(norm(m.name+m.comp+m.effect+m.fit).includes(k)) r.push(`<a class="res" href="tcm.html?id=${m.id}"><span class="k k-t">中藥</span><div><div>${esc(m.name)}</div><div class="s">${esc(m.effect)}</div></div></a>`)});
+  let n=0;CPM.forEach(m=>{ if(n<20&&norm(m.n+m.fn).includes(k)){n++;r.push(`<a class="res" href="cpm.html?id=${m.id}"><span class="k k-t" style="background:#f3e8ff;color:#7c3aed">中成藥</span><div><div>${esc(m.n)}</div><div class="s">${esc(m.fn.slice(0,40))}</div></div></a>`)}});
+  n=0;HERBS.forEach(m=>{ if(n<20&&norm(m.n+m.fn).includes(k)){n++;r.push(`<a class="res" href="herbs.html?id=${m.id}"><span class="k k-t">藥材</span><div><div>${esc(m.n)}</div><div class="s">${esc(m.fn.slice(0,40))}</div></div></a>`)}});
+  box.innerHTML=r.length?r.join(""):`<div class="empty">找不到「${esc(q.value)}」相關資料</div>`;
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#2563eb">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>常見疾病速查｜自我診療工具箱</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤒</text></svg>">
+<link rel="stylesheet" href="common.css">
+</head>
+<body>
+<div class="wrap" id="app"></div>
+
+<script src="data_west.js"></script>
+<script src="data_tcm.js"></script>
+<script src="data_disease.js"></script>
+<script src="data_cpm.js"></script>
+<script src="data_herb.js"></script>
+<script src="common.js"></script>
+<script>
+const app=document.getElementById("app");
+let cat="全部", kw="";
+
+function renderList(){
+  app.innerHTML=`
+  <div class="page-title"><span class="ico">🤒</span><div><h1>常見疾病速查</h1><p>點選疾病查看居家處理、中西藥建議與就醫警訊</p></div></div>
+  <input id="q" class="search" type="search" placeholder="搜尋疾病或症狀（例：流鼻水、胃痛）" value="${esc(kw)}" autocomplete="off">
+  <div class="chips" id="chips">${["全部",...DISEASE_CATS].map(c=>`<button class="chip ${c===cat?"on":""}" data-c="${c}">${c}</button>`).join("")}</div>
+  <div class="count" id="cnt"></div>
+  <div class="grid" id="grid"></div>
+  <p class="disclaimer">${DISCLAIMER}</p>`;
+  const q=document.getElementById("q");
+  q.addEventListener("input",()=>{kw=q.value;drawGrid();});
+  document.getElementById("chips").addEventListener("click",e=>{
+    const b=e.target.closest(".chip");if(!b)return;cat=b.dataset.c;
+    document.querySelectorAll(".chip").forEach(x=>x.classList.toggle("on",x===b));drawGrid();
+  });
+  drawGrid();
+}
+function drawGrid(){
+  const k=norm(kw.trim());
+  const list=DISEASES.filter(d=>(cat==="全部"||d.cat===cat)&&(!k||norm(d.name+d.symptom+d.care.join("")).includes(k)));
+  document.getElementById("cnt").textContent=`共 ${list.length} 項`;
+  document.getElementById("grid").innerHTML=list.length?list.map(d=>
+    `<div class="dcard" onclick="go('${d.id}')"><div class="e">${d.icon}</div><div class="n">${esc(d.name)}</div><div class="c">${esc(d.cat)}</div></div>`
+  ).join(""):`<div class="empty" style="grid-column:1/-1">找不到符合的疾病</div>`;
+}
+function cpmBlock(d){
+  const c=rankFor(CPM,d.id), h=rankFor(HERBS,d.id);
+  if(!c.length&&!h.length) return "";
+  const cl=c.slice(0,8).map(r=>`<div class="tcmrow"><a href="cpm.html?id=${r.id}"><b style="color:var(--primary)">${esc(r.n)}</b></a>
+      ${pregnancyFlag(r.no)?`<span class="tag rx">${pregnancyFlag(r.no)}</span>`:""}
+      <div class="k">${esc(r.fn)}</div>${r.u?`<div class="dose">💊 ${esc(r.u)}</div>`:""}</div>`).join("");
+  const hl=h.slice(0,12).map(r=>`<a href="herbs.html?id=${r.id}">${esc(r.n)}</a>`).join("");
+  return `<div class="card"><h2>📚 藥典參考</h2>
+    ${cl?`<div style="font-size:13px;color:var(--muted)">中成藥（共 ${c.length} 種相關）</div>${cl}
+    ${c.length>8?`<a class="back" style="margin-top:8px" href="cpm.html?d=${d.id}">查看全部 ${c.length} 種中成藥 ›</a>`:""}`:""}
+    ${hl?`<div style="font-size:13px;color:var(--muted);margin-top:10px">相關中藥材</div><div class="links" style="margin-top:4px">${hl}</div>
+    ${h.length>12?`<a class="back" style="margin-top:8px" href="herbs.html?d=${d.id}">查看全部 ${h.length} 種藥材 ›</a>`:""}`:""}
+    <div class="note-box">${CP_SRC}</div></div>`;
+}
+function go(id){history.pushState({id},"","?id="+id);renderDetail(id);window.scrollTo(0,0);}
+
+function renderDetail(id){
+  const d=byId(DISEASES,id);
+  if(!d){renderList();return;}
+  const west=d.west.map(w=>{const m=byId(WEST_MEDS,w.id);if(!m)return"";
+    return `<div class="med"><div style="flex:1">
+      <a href="westmed.html?id=${m.id}"><b>${esc(m.name)}</b></a> <span class="note">${esc(m.en)}</span>
+      ${m.tag.map(t=>`<span class="tag ${t==="處方藥"?"rx":""}">${t}</span>`).join("")}
+      <div class="note">👉 ${esc(w.note)}｜${esc(m.brand)}</div>
+      <div class="dose">💊 ${esc(m.dose)}</div></div></div>`;}).join("");
+  const tcm=d.tcm.map(t=>`<div class="tcmrow"><b>${esc(t.type)}</b><div class="k">${esc(t.key)}</div>
+      <div class="links">${t.rx.map(r=>{const m=byId(TCM_MEDS,r);return m?`<a href="tcm.html?id=${m.id}">${esc(m.name)}</a>`:""}).join("")}</div></div>`).join("");
+
+  app.innerHTML=`
+  <a class="back" href="disease.html" onclick="event.preventDefault();history.pushState({},'','disease.html');renderList();">‹ 返回疾病列表</a>
+  <div class="hero"><div class="e">${d.icon}</div><h1>${esc(d.name)}</h1><p>${esc(d.symptom)}</p></div>
+
+  <div class="card"><h2>🏠 居家處理</h2><ul>${d.care.map(c=>`<li>${esc(c)}</li>`).join("")}</ul></div>
+
+  ${west?`<div class="card"><h2>💊 西藥參考</h2>${west}
+    <div class="note-box">劑量為成人一般標示用量，請以產品仿單為準；兒童須依體重計算，請洽藥師。</div></div>`:""}
+
+  ${tcm?`<div class="card"><h2>🌿 中醫辨證參考</h2>${tcm}
+    <div class="note-box">中藥需依體質辨證，同一疾病不同證型用藥差異很大，建議經中醫師診斷後使用。</div></div>`:""}
+
+  ${cpmBlock(d)}
+  <div class="card redbox"><h2>🚨 出現以下情況請就醫</h2><ul>${d.red.map(r=>`<li>${esc(r)}</li>`).join("")}</ul></div>
+  <p class="disclaimer">${DISCLAIMER}</p>`;
+  document.title=d.name+"｜自我診療工具箱";
+}
+
+window.addEventListener("popstate",()=>{const id=qs("id");id?renderDetail(id):renderList();});
+const id0=qs("id"); id0?renderDetail(id0):renderList();
+</script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#2563eb">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>中成藥（藥典）｜自我診療工具箱</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📦</text></svg>">
+<link rel="stylesheet" href="common.css">
+</head>
+<body>
+<div class="wrap">
+  <div class="page-title"><span class="ico">📦</span><div><h1>中成藥（藥典）</h1><p>《中國藥典》2015 收載之成方製劑，依疾病系統分類</p></div></div>
+  <input id="q" class="search" type="search" placeholder="搜尋品名、症狀或藥材（例：感冒、板藍根、胃痛）" autocomplete="off">
+  <div class="chips" id="chips"></div>
+  <div id="dfilter" class="note-box" style="display:none;background:var(--primary-l);color:var(--primary-d)"></div>
+  <label style="font-size:13px;color:var(--muted);display:flex;gap:6px;align-items:center;margin:4px 2px"><input type="checkbox" id="tox">隱藏含毒性／峻烈藥材的製劑</label>
+  <div class="count" id="cnt"></div>
+  <div id="list"></div>
+  <button id="more" class="chip" style="display:block;margin:10px auto;padding:8px 24px">載入更多</button>
+  <div class="note-box"><b>如何看：</b>中成藥「功能主治」前半為中醫功效，「用於…」後為適用病證；「症見…」列出辨證要點，症狀相符才適用。心血管、肝膽、泌尿腎等慢性病類別僅供認識，請遵醫囑用藥。</div>
+  <p class="note-box" id="src"></p>
+  <p class="disclaimer" id="disc"></p>
+</div>
+<script src="data_west.js"></script>
+<script src="data_tcm.js"></script>
+<script src="data_disease.js"></script>
+<script src="data_cpm.js"></script>
+<script src="common.js"></script>
+<script src="pharm.js"></script>
+<script>
+pharmPage({data:CPM,cats:["感冒咳嗽","咽喉口鼻眼","頭痛眩暈","腸胃消化","筋骨痠痛","皮膚瘡瘍","婦科","兒科","失眠情緒","心血管","肝膽","泌尿腎","補益調理","注射劑（醫療用）","其他"],kind:"cpm"});
+</script>
+</body>
+</html>

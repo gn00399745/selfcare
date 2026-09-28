@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#2563eb">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>常用中藥｜自我診療工具箱</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+<link rel="stylesheet" href="common.css">
+</head>
+<body>
+<div class="wrap">
+  <div class="page-title"><span class="ico">🌿</span><div><h1>常用中藥</h1><p>台灣常見科學中藥方劑：組成、功效、適用證型</p></div></div>
+  <input id="q" class="search" type="search" placeholder="搜尋方名、藥材或症狀（例：葛根湯、失眠、黃耆）" autocomplete="off">
+  <div class="chips" id="chips"></div>
+  <div class="count" id="cnt"></div>
+  <div id="list"></div>
+  <div class="note-box">
+    <b>使用提醒：</b>科學中藥一般成人用量約每次 3–5 g、每日 3 次，實際請依中醫師處方或產品標示。
+    含<b>麻黃</b>方劑（葛根湯、麻黃湯、小青龍湯、麻杏甘石湯）高血壓、心臟病者慎用；含<b>大黃</b>方劑孕婦慎用；含<b>甘草</b>方劑勿長期大量服用。
+    與西藥併服建議間隔 1–2 小時；服用抗凝血藥者請先諮詢醫師。
+  </div>
+  <p class="disclaimer" id="disc"></p>
+</div>
+
+<script src="data_west.js"></script>
+<script src="data_tcm.js"></script>
+<script src="data_disease.js"></script>
+<script src="data_cpm.js"></script>
+<script src="common.js"></script>
+<script>
+document.getElementById("disc").innerHTML=DISCLAIMER;
+const GROUPS=[
+  ["感冒",m=>/解表|和解劑$/.test(m.cls)||["xiaochaihu","chaihuguizhi"].includes(m.id)],
+  ["咳嗽鼻",m=>["xiaoqinglong","maxingshigan","zhisou","maimendong","qingfei","cangersan","yupingfeng"].includes(m.id)],
+  ["口咽牙",m=>["puji","qingwei","yunu","daochi","ganlu"].includes(m.id)],
+  ["腸胃",m=>["huoxiang","gegenqinlian","shenling","xiangsha","baohe","pingwei","banxiaxiexin","anzhong","maziren","runchang","wuling"].includes(m.id)],
+  ["痠痛頭痛",m=>["chuanxiong","shaoyaogancao","shujing","duhuo","gegen"].includes(m.id)],
+  ["婦科",m=>["danggui","wenjing","jiaweixiaoyao","siwu"].includes(m.id)],
+  ["睡眠情緒",m=>["suanzaoren","tianwang","ganmai","guipi","jiaweixiaoyao"].includes(m.id)],
+  ["皮膚",m=>["xiaofeng","huanglianjiedu"].includes(m.id)],
+  ["其他",m=>["yizi","shengmai","qingshu","qiju"].includes(m.id)],
+];
+let g="全部",kw="";
+const focus=qs("id");
+const chips=document.getElementById("chips");
+chips.innerHTML=["全部",...GROUPS.map(x=>x[0])].map(c=>`<button class="chip ${c===g?"on":""}" data-c="${c}">${c}</button>`).join("");
+chips.addEventListener("click",e=>{const b=e.target.closest(".chip");if(!b)return;g=b.dataset.c;
+  chips.querySelectorAll(".chip").forEach(x=>x.classList.toggle("on",x===b));draw();});
+const q=document.getElementById("q");q.addEventListener("input",()=>{kw=q.value;draw();});
+
+function draw(){
+  const k=norm(kw.trim());
+  const grpFn=g==="全部"?null:GROUPS.find(x=>x[0]===g)[1];
+  const list=TCM_MEDS.filter(m=>(!grpFn||grpFn(m))&&(!k||norm(m.name+m.comp+m.effect+m.fit+m.cls).includes(k)));
+  document.getElementById("cnt").textContent=`共 ${list.length} 項`;
+  document.getElementById("list").innerHTML=list.length?list.map(m=>{
+    const ds=diseasesUsingTcm(m.id);
+    return `<details class="item ${m.id===focus?"hl":""}" id="m-${m.id}" ${m.id===focus?"open":""}>
+      <summary><div><div class="t1">${esc(m.name)}</div><div class="t2">${esc(m.cls)}｜${esc(m.effect)}</div></div></summary>
+      <div class="body"><dl class="kv">
+        <dt>組成</dt><dd>${esc(m.comp)}</dd>
+        <dt>功效</dt><dd>${esc(m.effect)}</dd>
+        <dt>適用</dt><dd>${esc(m.fit)}</dd>
+        <dt>注意</dt><dd style="color:var(--red)">${esc(m.caution)}</dd>
+        ${(()=>{const base=m.name.replace(/[湯散丸飲丹]$/,"");const cp=CPM.filter(r=>r.n.startsWith(base)&&base.length>=2);
+          return cp.length?`<dt>藥典製劑</dt><dd><div class="links">${cp.map(r=>`<a href="cpm.html?id=${r.id}">📦 ${esc(r.n)}</a>`).join("")}</div></dd>`:""})()}
+        ${ds.length?`<dt>相關疾病</dt><dd><div class="links">${ds.map(d=>`<a href="disease.html?id=${d.id}">${d.icon} ${esc(d.name)}</a>`).join("")}</div></dd>`:""}
+      </dl></div></details>`;}).join(""):`<div class="empty">找不到符合的方劑</div>`;
+}
+draw();
+if(focus){const el=document.getElementById("m-"+focus);if(el)setTimeout(()=>el.scrollIntoView({behavior:"smooth",block:"center"}),50);}
+</script>
+</body>
+</html>
