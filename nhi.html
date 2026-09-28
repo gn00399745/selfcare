@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#1e3a5f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>健保藥品｜自我診療工具箱</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏥</text></svg>">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="stylesheet" href="common.css">
+<style>
+select.sel{width:100%;padding:9px 10px;border:1.5px solid var(--line);border-radius:10px;font-size:14px;background:#fff;margin-top:6px}
+.prod{padding:8px 0;border-bottom:1px solid var(--line);font-size:13px}
+.prod:last-child{border:none}
+.prod .pn{font-weight:600;font-size:14px}
+.prod .pe{color:var(--muted);font-size:12px}
+.prod .pm{display:flex;flex-wrap:wrap;gap:4px 10px;margin-top:3px;color:var(--text)}
+.prod .pm span{white-space:nowrap}
+.price{color:var(--green);font-weight:600}
+.tag.og{background:#f3e8ff;color:#7c3aed}
+.curated{background:var(--green-l);border-radius:8px;padding:6px 10px;font-size:13px;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="page-title"><span class="ico">🏥</span><div><h1>健保藥品查詢</h1><p id="sub">健保署用藥品項檔：目前給付中的口服與外用藥</p></div></div>
+  <input id="q" class="search" type="search" placeholder="搜尋商品名、成分、廠商或 ATC（例：普拿疼、IBUPROFEN、R06）" autocomplete="off">
+  <div class="chips" id="chips"></div>
+  <select id="a2" class="sel"></select>
+  <label style="font-size:13px;color:var(--muted);display:flex;gap:6px;align-items:center;margin:8px 2px 0"><input type="checkbox" id="og">只看含原廠（研發廠）藥的成分</label>
+  <div class="count" id="cnt"></div>
+  <div id="list"></div>
+  <button id="more" class="chip" style="display:block;margin:10px auto;padding:8px 24px">載入更多</button>
+  <div class="note-box">
+    <b>說明：</b>健保品項大多為<b>處方藥</b>，須經醫師診斷開立，請勿自行購買服用。點「仿單」可到食藥署查看該藥的適應症、用法用量、副作用與禁忌。「健保價」是健保支付醫院的單位價格，不是藥局售價。
+  </div>
+  <p class="disclaimer" id="disc"></p>
+</div>
+
+<script src="data_west.js"></script>
+<script src="data_tcm.js"></script>
+<script src="data_disease.js"></script>
+<script src="data_nhi.js"></script>
+<script src="common.js"></script>
+<script>
+document.getElementById("disc").innerHTML=DISCLAIMER+"<br>資料來源：衛生福利部中央健康保險署「健保用藥品項查詢項目檔」。";
+const $=id=>document.getElementById(id);
+const G=NHI.g.map(([en,cn,atc,ps])=>({en,cn,atc,ps,
+  key:norm(en+" "+cn+" "+atc+" "+ps.map(p=>p[0]+" "+p[1]+" "+p[5]).join(" ")+" "+WEST_MEDS.filter(m=>m.atc&&atc.startsWith(m.atc)).map(m=>m.name+" "+(m.atc.length>=7?m.brand:"")).join(" ")),
+  og:ps.some(p=>p[7]===1)}));
+$("sub").textContent=`健保署用藥品項檔：目前給付中的口服與外用藥 ${G.reduce((s,g)=>s+g.ps.length,0).toLocaleString()} 項（${G.length.toLocaleString()} 種成分）`;
+let a1=qs("a1")||"全部", a2=qs("atc")||"", kw=qs("q")||"", ogOnly=false, shown=30;
+if(a2) a1=a2[0];
+const chips=$("chips");
+function drawChips(){
+  chips.innerHTML=["全部",...Object.keys(NHI.a1)].map(c=>`<button class="chip ${c===a1?"on":""}" data-c="${c}">${c==="全部"?"全部":c+" "+NHI.a1[c]}</button>`).join("");
+  const opts=Object.entries(NHI.a2).filter(([k])=>a1==="全部"||k[0]===a1);
+  $("a2").innerHTML=`<option value="">— 次分類（全部）—</option>`+opts.map(([k,v])=>`<option value="${k}" ${a2.startsWith(k)?"selected":""}>${k} ${v}</option>`).join("")
+    +(a2.length>3?`<option value="${a2}" selected>${a2}（指定 ATC）</option>`:"");
+}
+chips.addEventListener("click",e=>{const b=e.target.closest(".chip");if(!b)return;a1=b.dataset.c;a2="";shown=30;drawChips();draw();});
+$("a2").addEventListener("change",e=>{a2=e.target.value;shown=30;draw();});
+$("q").value=kw;$("q").addEventListener("input",e=>{kw=e.target.value;shown=30;draw();});
+$("og").addEventListener("change",e=>{ogOnly=e.target.checked;shown=30;draw();});
+$("more").addEventListener("click",()=>{shown+=30;draw();});
+
+const curatedByAtc=a=>WEST_MEDS.filter(m=>m.atc&&a.startsWith(m.atc));
+function card(g){
+  const prices=g.ps.map(p=>p[4]);const lo=Math.min(...prices),hi=Math.max(...prices);
+  const cur=curatedByAtc(g.atc);
+  const forms=[...new Set(g.ps.map(p=>p[2]))].slice(0,4).join("、");
+  return `<details class="item">
+    <summary><div><div class="t1">${esc(g.cn||g.en)}${g.og?' <span class="tag og">原廠</span>':""}${cur.length?' <span class="tag">常備藥</span>':""}</div>
+      <div class="t2">${g.cn?esc(g.en)+"｜":""}${esc(g.atc)} ${esc(NHI.a2[g.atc.slice(0,3)]||"")}｜${g.ps.length} 品項｜${esc(forms)}</div></div></summary>
+    <div class="body">
+      ${cur.length?`<div class="curated">💊 常備藥有詳細用法：${cur.map(m=>`<a href="westmed.html?id=${m.id}">${esc(m.name)}</a>`).join("、")}</div>`:""}
+      <div style="font-size:12px;color:var(--muted);margin:8px 0 2px">健保價 ${lo}${hi!==lo?"–"+hi:""} 元</div>
+      ${g.ps.map(p=>`<div class="prod"><div class="pn">${esc(p[0])}${p[7]===1?' <span class="tag og">原廠</span>':p[7]===2?' <span class="tag">BA/BE</span>':""}</div>
+        <div class="pe">${esc(p[1])}</div>
+        <div class="pm"><span>${esc(p[2])}</span>${p[3]?`<span>${esc(p[3])}</span>`:""}<span class="price">$${p[4]}</span><span>${esc(p[5])}</span>
+        ${p[6]?`<a href="https://lmspiq.fda.gov.tw/web/DRPIQ/DRPIQ1000Result?licId=${p[6]}" target="_blank" rel="noopener">仿單 ↗</a>`:""}</div></div>`).join("")}
+    </div></details>`;
+}
+function draw(){
+  const k=norm(kw.trim());
+  const list=G.filter(g=>(a1==="全部"||g.atc[0]===a1)&&(!a2||g.atc.startsWith(a2))&&(!ogOnly||g.og)&&(!k||g.key.includes(k)));
+  $("cnt").textContent=`共 ${list.length} 種成分、${list.reduce((s,g)=>s+g.ps.length,0)} 個品項`;
+  $("list").innerHTML=list.length?list.slice(0,shown).map(card).join(""):`<div class="empty">找不到符合的藥品</div>`;
+  $("more").style.display=list.length>shown?"":"none";
+}
+drawChips();draw();
+</script>
+</body>
+</html>

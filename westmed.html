@@ -13,7 +13,7 @@
 </head>
 <body>
 <div class="wrap">
-  <div class="page-title"><span class="ico">💊</span><div><h1>常用西藥</h1><p>藥局可購得之成藥、指示藥（成人一般用量）</p></div></div>
+  <div class="page-title"><span class="ico">💊</span><div><h1>常用西藥</h1><p>藥局可購得之成藥、指示藥（成人一般用量）；更多品項見「健保藥品」</p></div></div>
   <input id="q" class="search" type="search" placeholder="搜尋學名、商品名或用途（例：普拿疼、鼻塞）" autocomplete="off">
   <div class="chips" id="chips"></div>
   <div class="count" id="cnt"></div>
@@ -61,6 +61,7 @@ function draw(){
         <dt>用途</dt><dd>${esc(m.use)}</dd>
         <dt>成人用量</dt><dd>${esc(m.dose)}</dd>
         <dt>注意</dt><dd style="color:var(--red)">${esc(m.caution)}</dd>
+        ${m.atc?`<dt>健保品項</dt><dd><a href="nhi.html?atc=${m.atc}">查看同成分的健保藥品與仿單 ›</a></dd>`:""}
         ${ds.length?`<dt>相關疾病</dt><dd><div class="links">${ds.map(d=>`<a href="disease.html?id=${d.id}">${d.icon} ${esc(d.name)}</a>`).join("")}</div></dd>`:""}
       </dl></div></details>`;}).join(""):`<div class="empty">找不到符合的藥品</div>`;
 }

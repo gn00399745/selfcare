@@ -1,7 +1,7 @@
 // 共用：導覽列、工具函式、反向索引
 (function(){
   const pages=[
-    ["index.html","🏠 首頁"],["disease.html","🤒 疾病速查"],["westmed.html","💊 常用西藥"],["tcm.html","🌿 常用方劑"],["cpm.html","📦 中成藥"],["herbs.html","🍃 中藥材"],["knowledge.html","📖 用藥知識"]
+    ["index.html","🏠 首頁"],["disease.html","🤒 疾病速查"],["westmed.html","💊 常用西藥"],["nhi.html","🏥 健保藥品"],["tcm.html","🌿 常用方劑"],["cpm.html","📦 中成藥"],["herbs.html","🍃 中藥材"],["knowledge.html","📖 用藥知識"]
   ];
   const cur=(location.pathname.split("/").pop()||"index.html");
   const nav=document.createElement("nav");nav.className="topnav";

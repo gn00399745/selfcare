@@ -1,7 +1,7 @@
 // 離線快取：先回快取、背景更新（stale-while-revalidate）；改版時提升 VERSION
-const VERSION = 'selfcare-v1';
-const FILES = ['./','index.html','disease.html','westmed.html','tcm.html','cpm.html','herbs.html','knowledge.html',
-  'common.css','common.js','pharm.js','data_disease.js','data_west.js','data_tcm.js','data_cpm.js','data_herb.js',
+const VERSION = 'selfcare-v2';
+const FILES = ['./','index.html','disease.html','westmed.html','tcm.html','cpm.html','herbs.html','knowledge.html','nhi.html',
+  'common.css','common.js','pharm.js','data_disease.js','data_west.js','data_tcm.js','data_cpm.js','data_herb.js','data_nhi.js',
   'manifest.webmanifest','icon-192.png','icon-512.png','icon-maskable.png','apple-touch-icon.png'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(VERSION).then(c => c.addAll(FILES))); self.skipWaiting(); });
 self.addEventListener('activate', e => {
