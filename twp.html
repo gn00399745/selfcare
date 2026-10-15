@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#1e3a5f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>臺灣中藥典｜自我診療工具箱</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📗</text></svg>">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="stylesheet" href="common.css">
+<style>
+.tabs{display:flex;gap:6px;margin:4px 0 12px;overflow-x:auto;scrollbar-width:none}
+.tabs button{flex:none;border:none;background:#fff;padding:8px 14px;border-radius:10px;font-size:14px;cursor:pointer;color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.tabs button.on{background:var(--navy);color:var(--gold);font-weight:600}
+.badge-tw{display:inline-block;font-size:11px;padding:1px 7px;border-radius:6px;background:#e0f2fe;color:#0369a1;font-weight:600;margin-left:4px;vertical-align:middle}
+.yp{background:var(--bg);border-radius:8px;padding:6px 10px;margin-top:6px;font-size:13px}
+.no{font-size:12px;color:var(--muted);margin-right:4px}
+section[hidden]{display:none}
+table.t{width:100%;border-collapse:collapse;font-size:13px}
+table.t th,table.t td{border:1px solid var(--line);padding:6px 8px;text-align:left}
+table.t th{background:var(--primary-l);color:var(--navy)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="page-title"><span class="ico">📗</span><div><h1>臺灣中藥典</h1><p>衛福部《臺灣中藥典》第四版：法定中藥材規格、基準方 200 方、毒劇中藥</p></div></div>
+
+  <div class="tabs" id="tabs">
+    <button data-t="herb" class="on">中藥材</button>
+    <button data-t="fang">基準方 200 方</button>
+    <button data-t="tox">毒劇中藥</button>
+  </div>
+
+  <section id="s-herb">
+    <input id="qh" class="search" type="search" placeholder="搜尋藥材名、功能、拉丁名（例：黃耆、清熱、GINSENG）" autocomplete="off">
+    <div class="chips" id="ch"></div>
+    <div id="dfh" class="note-box" style="display:none;background:var(--primary-l);color:var(--primary-d)"></div>
+    <label style="font-size:13px;color:var(--muted);display:flex;gap:6px;align-items:center;margin:4px 2px"><input type="checkbox" id="toxh" checked>隱藏有毒藥材</label>
+    <div class="count" id="cnth"></div>
+    <div id="listh"></div>
+    <button id="moreh" class="chip" style="display:block;margin:10px auto;padding:8px 24px">載入更多</button>
+    <div class="note-box">用量為<b>成人一日</b>臨床常用量，除另註明外指水煎內服。「先煎、後下、包煎、烊化」為特殊煎法。「十八反、十九畏」等配伍禁忌見注意事項。</div>
+  </section>
+
+  <section id="s-fang" hidden>
+    <input id="qf" class="search" type="search" placeholder="搜尋方名、組成、效能或適應症（例：失眠、葛根湯、咳嗽）" autocomplete="off">
+    <div id="dff" class="note-box" style="display:none;background:var(--primary-l);color:var(--primary-d)"></div>
+    <div class="count" id="cntf"></div>
+    <div id="listf"></div>
+    <button id="moref" class="chip" style="display:block;margin:10px auto;padding:8px 24px">載入更多</button>
+    <div class="note-box">基準方是衛福部公告中藥製劑（多為科學中藥濃縮製劑）的處方依據，組成數字為一日飲片量（公克）。方名後註明（丸）（散）者另有傳統劑型。科學中藥實際服用量請依產品標示或中醫師處方。</div>
+  </section>
+
+  <section id="s-tox" hidden>
+    <div class="card"><h2>☠️ 毒劇中藥一覽表</h2>
+      <p style="font-size:14px;margin-bottom:8px">下列藥材毒性強烈，須經炮製或由中醫師依規定調劑，一般民眾不可自行使用。多為「生品」，炮製後毒性降低（如生半夏→法半夏、生附子→炮附子）。</p>
+      <table class="t" id="toxT"><tr><th>品項</th><th>拉丁生藥名</th></tr></table>
+    </div>
+  </section>
+
+  <p class="note-box" id="src"></p>
+  <p class="disclaimer" id="disc"></p>
+</div>
+
+<script src="data_west.js"></script>
+<script src="data_tcm.js"></script>
+<script src="data_disease.js"></script>
+<script src="data_twp.js"></script>
+<script src="common.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+$("disc").innerHTML=DISCLAIMER;
+$("src").innerHTML='資料來源：衛生福利部《臺灣中藥典》第四版（民國 110 年公告，111 年 6 月 1 日生效）。114 年 7 月 30 日修正大黃、川芎等 8 品項之檢驗方法，不影響本頁所列性味、功能與用量。';
+const tabs=$("tabs");
+function showTab(t){tabs.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));document.querySelectorAll("section").forEach(s=>s.hidden=s.id!=="s-"+t);}
+tabs.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;showTab(b.dataset.t);history.replaceState(null,"","?tab="+b.dataset.t);});
+const did=qs("d"), dz=did?byId(DISEASES,did):null, focus=qs("id");
+if(qs("tab"))showTab(qs("tab"));
+const dzLink=el=>{if(dz){el.innerHTML=`篩選疾病：<b>${dz.icon} ${esc(dz.name)}</b> <a href="twp.html?tab=${qs("tab")||"herb"}">✕ 清除</a>`;el.style.display="";}};
+const dzLinks=ids=>{const ds=ids.map(i=>byId(DISEASES,i)).filter(Boolean);return ds.length?`<dt>相關疾病</dt><dd><div class="links">${ds.map(d=>`<a href="disease.html?id=${d.id}">${d.icon} ${esc(d.name)}</a>`).join("")}</div></dd>`:""};
+
+// ── 中藥材 ──
+const H=TWP.herbs; H.forEach((h,i)=>h.id="t"+i);
+const cats=["全部",...[...new Set(H.map(h=>h.c1).filter(Boolean))]];
+let ch="全部",kh="",hideTox=true,sh=40;
+$("ch").innerHTML=cats.map(c=>`<button class="chip ${c===ch?"on":""}" data-c="${c}">${c}</button>`).join("");
+$("ch").addEventListener("click",e=>{const b=e.target.closest(".chip");if(!b)return;ch=b.dataset.c;sh=40;$("ch").querySelectorAll(".chip").forEach(x=>x.classList.toggle("on",x===b));drawH();});
+$("qh").addEventListener("input",e=>{kh=e.target.value;sh=40;drawH();});
+$("toxh").addEventListener("change",e=>{hideTox=e.target.checked;sh=40;drawH();});
+$("moreh").addEventListener("click",()=>{sh+=40;drawH();});
+function herbItem(h){
+  const pf=pregnancyFlag(h.no);
+  return `<details class="item ${h.n===focus?"hl":""}" id="h-${h.id}" ${h.n===focus?"open":""}><summary><div>
+    <div class="t1">${esc(h.n)}${h.tx.length?` <span class="tag rx">⚠️ ${esc(h.tx[0])}</span>`:""}${pf?` <span class="tag rx">${pf}</span>`:""}</div>
+    <div class="t2">${esc(h.c1)}${h.c2?"（"+esc(h.c2)+"）":""}｜${esc(h.fn.slice(0,30))}</div></div></summary>
+    <div class="body"><dl class="kv">
+      <dt>生藥名</dt><dd>${esc(h.la)}${h.en?"<br><span style='color:var(--muted);font-size:13px'>"+esc(h.en)+"</span>":""}</dd>
+      ${h.src?`<dt>基原</dt><dd style="font-size:13px">${esc(h.src)}</dd>`:""}
+      <dt>性味歸經</dt><dd>${esc(h.xw)}</dd>
+      <dt>功能</dt><dd>${esc(h.fn)}</dd>
+      <dt>用法用量</dt><dd>${esc(h.u)}</dd>
+      ${h.no?`<dt>注意</dt><dd style="color:var(--red)">${esc(h.no)}</dd>`:""}
+      ${dzLinks(h.d)}
+    </dl>
+    ${h.yp.map(y=>`<div class="yp"><b>【飲片】${esc(y.n)}</b>${y.xw&&y.xw!==h.xw?`<br>性味：${esc(y.xw)}`:""}${y.fn&&y.fn!==h.fn?`<br>功能：${esc(y.fn)}`:""}${y.u&&y.u!==h.u?`<br>用量：${esc(y.u)}`:""}${y.no&&y.no!==h.no?`<br><span style="color:var(--red)">注意：${esc(y.no)}</span>`:""}</div>`).join("")}
+    </div></details>`;
+}
+function drawH(){
+  const k=norm(kh.trim());
+  let L=H.filter(h=>(ch==="全部"||h.c1===ch)&&(!did||h.d.includes(did))&&(!hideTox||!h.tx.length||h.n===focus)&&(!k||norm(h.n+h.la+h.en+h.fn+h.c1+h.c2+h.xw+h.yp.map(y=>y.n).join("")).includes(k)));
+  $("cnth").textContent=`共 ${L.length} 項`;
+  $("listh").innerHTML=L.length?L.slice(0,sh).map(herbItem).join(""):`<div class="empty">找不到符合的藥材</div>`;
+  $("moreh").style.display=L.length>sh?"":"none";
+}
+if(focus&&!qs("tab")){kh=focus;$("qh").value=focus;}
+dzLink($("dfh"));drawH();
+
+// ── 基準方 ──
+const F=TWP.fang;let kf="",sf=30;
+$("qf").addEventListener("input",e=>{kf=e.target.value;sf=30;drawF();});
+$("moref").addEventListener("click",()=>{sf+=30;drawF();});
+const herbLink=c=>esc(c).replace(/([一-鿿]{1,6})(?=\d)/g,(m)=>H.some(h=>h.n===m)?`<a href="twp.html?id=${encodeURIComponent(m)}">${m}</a>`:m);
+function drawF(){
+  const k=norm(kf.trim());
+  const L=F.filter(f=>(!did||f.d.includes(did))&&(!k||norm(f.n+f.c+f.eff+f.ind+f.src).includes(k)));
+  $("cntf").textContent=`共 ${L.length} 方`;
+  $("listf").innerHTML=L.length?L.slice(0,sf).map(f=>`<details class="item" id="f-${f.no}" ${qs("no")==f.no?"open":""}><summary><div>
+    <div class="t1"><span class="no">${f.no}</span>${esc(f.n)}</div><div class="t2">${esc(f.eff)}｜${esc(f.ind.slice(0,26))}${f.ind.length>26?"…":""}</div></div></summary>
+    <div class="body"><dl class="kv"><dt>出典</dt><dd>${esc(f.src)}</dd><dt>效能</dt><dd>${esc(f.eff)}</dd><dt>適應症</dt><dd>${esc(f.ind)}</dd>
+    <dt>組成</dt><dd style="font-size:13px">${herbLink(f.c)}</dd>${dzLinks(f.d)}</dl></div></details>`).join(""):`<div class="empty">找不到符合的方劑</div>`;
+  $("moref").style.display=L.length>sf?"":"none";
+}
+if(qs("no")){kf="";}
+dzLink($("dff"));drawF();
+if(qs("no")){const el=$("f-"+qs("no"));if(el)setTimeout(()=>el.scrollIntoView({behavior:"smooth",block:"center"}),60);}
+
+// ── 毒劇 ──
+$("toxT").innerHTML+=TWP.tox.map(t=>`<tr><td>${esc(t[0])}</td><td style="font-size:12px">${esc(t[1])}</td></tr>`).join("");
+</script>
+</body>
+</html>

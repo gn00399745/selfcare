@@ -17,6 +17,7 @@
 <script src="data_west.js"></script>
 <script src="data_tcm.js"></script>
 <script src="data_disease.js"></script>
+<script src="data_twp.js"></script>
 <script src="data_cpm.js"></script>
 <script src="data_herb.js"></script>
 <script src="common.js"></script>
@@ -47,6 +48,15 @@ function drawGrid(){
   document.getElementById("grid").innerHTML=list.length?list.map(d=>
     `<div class="dcard" onclick="go('${d.id}')"><div class="e">${d.icon}</div><div class="n">${esc(d.name)}</div><div class="c">${esc(d.cat)}</div></div>`
   ).join(""):`<div class="empty" style="grid-column:1/-1">找不到符合的疾病</div>`;
+}
+function twpBlock(d){
+  const f=TWP.fang.filter(x=>x.d.includes(d.id)).sort((a,b)=>a.d.length-b.d.length);
+  if(!f.length) return "";
+  return `<div class="card"><h2>📗 臺灣中藥典基準方</h2>
+    ${f.slice(0,8).map(x=>`<div class="tcmrow"><a href="twp.html?tab=fang&no=${x.no}"><b style="color:var(--primary)">${esc(x.n)}</b></a>
+      <div class="k">效能：${esc(x.eff)}</div><div style="font-size:13px">適應症：${esc(x.ind)}</div></div>`).join("")}
+    ${f.length>8?`<a class="back" style="margin-top:8px" href="twp.html?tab=fang&d=${d.id}">查看全部 ${f.length} 方 ›</a>`:""}
+    <div class="note-box">衛福部公告之中藥基準方，為台灣科學中藥製劑的法定處方依據；實際使用仍需中醫師辨證。</div></div>`;
 }
 function cpmBlock(d){
   const c=rankFor(CPM,d.id), h=rankFor(HERBS,d.id);
@@ -88,6 +98,7 @@ function renderDetail(id){
   ${tcm?`<div class="card"><h2>🌿 中醫辨證參考</h2>${tcm}
     <div class="note-box">中藥需依體質辨證，同一疾病不同證型用藥差異很大，建議經中醫師診斷後使用。</div></div>`:""}
 
+  ${twpBlock(d)}
   ${cpmBlock(d)}
   <div class="card redbox"><h2>🚨 出現以下情況請就醫</h2><ul>${d.red.map(r=>`<li>${esc(r)}</li>`).join("")}</ul></div>
   <p class="disclaimer">${DISCLAIMER}</p>`;

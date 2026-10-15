@@ -30,6 +30,7 @@
 <script src="data_tcm.js"></script>
 <script src="data_disease.js"></script>
 <script src="data_cpm.js"></script>
+<script src="data_twp.js"></script>
 <script src="common.js"></script>
 <script>
 document.getElementById("disc").innerHTML=DISCLAIMER;
@@ -42,6 +43,7 @@ const GROUPS=[
   ["婦科",m=>["danggui","wenjing","jiaweixiaoyao","siwu"].includes(m.id)],
   ["睡眠情緒",m=>["suanzaoren","tianwang","ganmai","guipi","jiaweixiaoyao"].includes(m.id)],
   ["皮膚",m=>["xiaofeng","huanglianjiedu"].includes(m.id)],
+  ["外傷",m=>["taohong","xuefu","ziyun","ruyi","yunnanbaiyao"].includes(m.id)],
   ["其他",m=>["yizi","shengmai","qingshu","qiju"].includes(m.id)],
 ];
 let g="全部",kw="";
@@ -66,6 +68,8 @@ function draw(){
         <dt>功效</dt><dd>${esc(m.effect)}</dd>
         <dt>適用</dt><dd>${esc(m.fit)}</dd>
         <dt>注意</dt><dd style="color:var(--red)">${esc(m.caution)}</dd>
+        ${(()=>{const b=m.name.replace(/[（(].*$/,"");const f=TWP.fang.find(x=>x.n.replace(/[（(].*$/,"")===b);
+          return f?`<dt>臺灣基準方</dt><dd><a href="twp.html?tab=fang&no=${f.no}">第 ${f.no} 方：${esc(f.n)}</a>｜${esc(f.eff)}</dd>`:""})()}
         ${(()=>{const base=m.name.replace(/[湯散丸飲丹]$/,"");const cp=CPM.filter(r=>r.n.startsWith(base)&&base.length>=2);
           return cp.length?`<dt>藥典製劑</dt><dd><div class="links">${cp.map(r=>`<a href="cpm.html?id=${r.id}">📦 ${esc(r.n)}</a>`).join("")}</div></dd>`:""})()}
         ${ds.length?`<dt>相關疾病</dt><dd><div class="links">${ds.map(d=>`<a href="disease.html?id=${d.id}">${d.icon} ${esc(d.name)}</a>`).join("")}</div></dd>`:""}

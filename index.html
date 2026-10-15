@@ -63,6 +63,10 @@
       <div class="ic">🌿</div>
       <div><div class="tt">常用方劑</div><div class="ds">台灣常見科學中藥方劑的組成、功效、適用證型</div><div class="fn">tcm.html</div></div>
     </a>
+    <a class="tool" href="twp.html">
+      <div class="ic">📗</div>
+      <div><div class="tt">臺灣中藥典</div><div class="ds">衛福部第四版：355 種法定中藥材、基準方 200 方、毒劇中藥一覽</div><div class="fn">twp.html</div></div>
+    </a>
     <a class="tool" href="cpm.html">
       <div class="ic">📦</div>
       <div><div class="tt">中成藥（藥典）</div><div class="ds" id="cpmN">《中國藥典》成方製劑，依疾病系統分類</div><div class="fn">cpm.html</div></div>
@@ -70,6 +74,10 @@
     <a class="tool" href="herbs.html">
       <div class="ic">🍃</div>
       <div><div class="tt">中藥材（藥典）</div><div class="ds" id="herbN">單味藥材的性味歸經、功能主治、用量</div><div class="fn">herbs.html</div></div>
+    </a>
+    <a class="tool" href="drugs.html">
+      <div class="ic">🚫</div>
+      <div><div class="tt">毒品與管制藥品</div><div class="ds">毒品分級與俗名、危害、醫療用管制藥品、法律刑度與通關提醒</div><div class="fn">drugs.html</div></div>
     </a>
     <a class="tool" href="knowledge.html">
       <div class="ic">📖</div>
@@ -90,6 +98,7 @@
 <script src="data_disease.js"></script>
 <script src="data_cpm.js"></script>
 <script src="data_herb.js"></script>
+<script src="data_twp.js"></script>
 <script src="common.js"></script>
 <script>
 document.getElementById("disc").innerHTML=DISCLAIMER;
@@ -104,6 +113,8 @@ q.addEventListener("input",()=>{
   DISEASES.forEach(d=>{ if(norm(d.name+d.symptom+d.cat).includes(k)) r.push(`<a class="res" href="disease.html?id=${d.id}"><span class="k k-d">疾病</span><div><div>${d.icon} ${esc(d.name)}</div><div class="s">${esc(d.symptom.slice(0,40))}…</div></div></a>`)});
   WEST_MEDS.forEach(m=>{ if(norm(m.name+m.en+m.brand+m.use+m.cls).includes(k)) r.push(`<a class="res" href="westmed.html?id=${m.id}"><span class="k k-w">西藥</span><div><div>${esc(m.name)} <span class="s">${esc(m.en)}</span></div><div class="s">${esc(m.brand)}</div></div></a>`)});
   TCM_MEDS.forEach(m=>{ if(norm(m.name+m.comp+m.effect+m.fit).includes(k)) r.push(`<a class="res" href="tcm.html?id=${m.id}"><span class="k k-t">中藥</span><div><div>${esc(m.name)}</div><div class="s">${esc(m.effect)}</div></div></a>`)});
+  TWP.fang.forEach(m=>{ if(norm(m.n+m.eff+m.ind).includes(k)) r.push(`<a class="res" href="twp.html?tab=fang&no=${m.no}"><span class="k k-t" style="background:#e0f2fe;color:#0369a1">基準方</span><div><div>${esc(m.n)}</div><div class="s">${esc(m.eff)}｜${esc(m.ind.slice(0,30))}</div></div></a>`)});
+  TWP.herbs.forEach(m=>{ if(norm(m.n+m.fn).includes(k)) r.push(`<a class="res" href="twp.html?id=${encodeURIComponent(m.n)}"><span class="k k-t" style="background:#e0f2fe;color:#0369a1">臺灣藥典</span><div><div>${esc(m.n)}</div><div class="s">${esc(m.fn)}</div></div></a>`)});
   let n=0;CPM.forEach(m=>{ if(n<20&&norm(m.n+m.fn).includes(k)){n++;r.push(`<a class="res" href="cpm.html?id=${m.id}"><span class="k k-t" style="background:#f3e8ff;color:#7c3aed">中成藥</span><div><div>${esc(m.n)}</div><div class="s">${esc(m.fn.slice(0,40))}</div></div></a>`)}});
   n=0;HERBS.forEach(m=>{ if(n<20&&norm(m.n+m.fn).includes(k)){n++;r.push(`<a class="res" href="herbs.html?id=${m.id}"><span class="k k-t">藥材</span><div><div>${esc(m.n)}</div><div class="s">${esc(m.fn.slice(0,40))}</div></div></a>`)}});
   box.innerHTML=r.length?r.join(""):`<div class="empty">找不到「${esc(q.value)}」相關資料</div>`;

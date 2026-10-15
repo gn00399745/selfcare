@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#1e3a5f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>毒品與管制藥品｜自我診療工具箱</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚫</text></svg>">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="stylesheet" href="common.css">
+<style>
+.tabs{display:flex;gap:6px;margin:4px 0 12px;overflow-x:auto;scrollbar-width:none}
+.tabs button{flex:none;border:none;background:#fff;padding:8px 14px;border-radius:10px;font-size:14px;cursor:pointer;color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.tabs button.on{background:var(--navy);color:var(--gold);font-weight:600}
+.lv{display:inline-block;font-size:11px;padding:1px 7px;border-radius:6px;margin-left:4px;font-weight:600;vertical-align:middle}
+.lv1{background:#7f1d1d;color:#fff}.lv2{background:#dc2626;color:#fff}.lv3{background:#f59e0b;color:#fff}.lv4{background:#fde68a;color:#92400e}.lv0{background:var(--bg);color:var(--muted)}
+table.t{width:100%;border-collapse:collapse;font-size:13px}
+table.t th,table.t td{border:1px solid var(--line);padding:6px 7px;vertical-align:top;text-align:left}
+table.t th{background:var(--primary-l);color:var(--navy);white-space:nowrap}
+.tw{overflow-x:auto}
+.tw table.t{min-width:560px}
+.tw table.t td:first-child{white-space:nowrap}
+.help{background:linear-gradient(135deg,#065f46,#047857);color:#fff;border-radius:14px;padding:14px 16px;margin-bottom:12px;font-size:14px}
+.help b{color:#fde68a;font-size:17px}
+.help a{color:#fff;text-decoration:underline}
+section[hidden]{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="page-title"><span class="ico">🚫</span><div><h1>毒品與管制藥品</h1><p>分級、俗名、危害、醫療用管制藥品與法律責任</p></div></div>
+
+  <div class="tabs" id="tabs">
+    <button data-t="abuse" class="on">常見濫用物質</button>
+    <button data-t="level">分級與管理</button>
+    <button data-t="cd">醫療用管制藥品</button>
+    <button data-t="law">法律責任</button>
+  </div>
+
+  <!-- 常見濫用物質 -->
+  <section id="s-abuse">
+    <input id="q" class="search" type="search" placeholder="搜尋名稱、英文或俗名（例：K仔、冰塊、喪屍煙彈）" autocomplete="off">
+    <div class="chips" id="lvChips"></div>
+    <div class="chips" id="catChips" style="padding-top:0"></div>
+    <div class="count" id="cnt"></div>
+    <div id="list"></div>
+    <div class="note-box">混合包裝的「毒咖啡包」「彩虹菸」「煙彈」常同時含有多種毒品，外觀無法辨識成分，危險性更高。</div>
+  </section>
+
+  <!-- 分級與管理 -->
+  <section id="s-level" hidden>
+    <div class="card"><h2>⚖️ 毒品 vs. 管制藥品</h2>
+      <div class="tw"><table class="t">
+        <tr><th></th><th>毒品</th><th>管制藥品</th></tr>
+        <tr><td>法源</td><td>毒品危害防制條例（法務部）</td><td>管制藥品管理條例（衛福部食藥署）</td></tr>
+        <tr><td>定義</td><td>具成癮性、濫用性、對社會危害性之麻醉藥品與其製品及影響精神物質與其製品</td><td>成癮性麻醉藥品、影響精神藥品及其他需加強管理之藥品，<b>限供醫藥及科學上之需用</b></td></tr>
+        <tr><td>分級</td><td>依成癮性、濫用性、社會危害性分<b>四級</b></td><td>依習慣性、依賴性、濫用性、社會危害性分<b>四級</b></td></tr>
+        <tr><td>關係</td><td colspan="2">同一成分常同時列管：<b>合法醫療使用</b>時是「管制藥品」，<b>非法製造、販賣、持有、施用</b>時即是「毒品」。例如嗎啡是第一級管制藥品，也是第一級毒品；佐沛眠是第四級管制藥品，也是第四級毒品。</td></tr>
+      </table></div>
+    </div>
+    <div class="card"><h2>🎚️ 四級分類與代表物質</h2>
+      <div class="tw"><table class="t">
+        <tr><th>級別</th><th>代表物質</th></tr>
+        <tr><td><span class="lv lv1">第一級</span></td><td>海洛因、嗎啡、鴉片、古柯鹼、依託咪酯</td></tr>
+        <tr><td><span class="lv lv2">第二級</span></td><td>（甲基）安非他命、MDMA（搖頭丸）、大麻、LSD、GHB、PMA、PMMA、MDPV、西洛西賓（魔菇）、PCP；醫療用：配西汀、吩坦尼、羥可酮、可待因（單方）</td></tr>
+        <tr><td><span class="lv lv3">第三級</span></td><td>愷他命、FM2（Flunitrazepam）、巴比妥酸鹽類、Mephedrone（喵喵）、Methylone、TFMPP</td></tr>
+        <tr><td><span class="lv lv4">第四級</span></td><td>多數苯二氮平類安眠鎮靜藥（如 Alprazolam、Diazepam、Lorazepam）、佐沛眠、5-MeO-DIPT</td></tr>
+      </table></div>
+      <div class="note-box">完整品項以行政院公告之「管制藥品分級及品項」與「毒品之分級及品項」為準，會隨新興毒品持續增列。</div>
+    </div>
+    <div class="card"><h2>🏥 管制藥品管理重點</h2>
+      <ul style="font-size:14px">
+        <li><b>專用處方箋：</b>醫師使用第一至三級管制藥品須開立管制藥品專用處方箋（第 8 條）。</li>
+        <li><b>登記證：</b>輸入、輸出、製造、販賣、購買管制藥品的業者與醫療機構，須向食藥署申請管制藥品登記證（第 16 條）。</li>
+        <li><b>第一、二級輸出入：</b>僅限食藥署管制藥品製藥工廠，且須申請核發憑照（第 19 條）。</li>
+        <li><b>第三、四級輸出入：</b>除取得藥品許可證外，須<b>逐批</b>向食藥署申請同意書（第 20 條）。</li>
+        <li><b>旅客攜帶：</b>個人自用的管制藥品，實務上應備妥醫療院所診斷書或處方箋，並以合理自用數量為限；未備證明或超量者可能被海關查扣。</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 醫療用管制藥品 -->
+  <section id="s-cd" hidden>
+    <div class="note-box" style="margin-top:0">以下為食藥署管制藥品製藥工廠供應的醫療用管制藥品，僅供醫療機構依處方使用。</div>
+    <div class="chips" id="cdChips"></div>
+    <div id="cdList"></div>
+  </section>
+
+  <!-- 法律責任 -->
+  <section id="s-law" hidden>
+    <div class="card"><h2>⚖️ 毒品危害防制條例刑度</h2>
+      <div class="tw"><table class="t">
+        <tr><th>行為</th><th><span class="lv lv1">一級</span></th><th><span class="lv lv2">二級</span></th><th><span class="lv lv3">三級</span></th><th><span class="lv lv4">四級</span></th></tr>
+        <tr><td>製造、運輸、販賣<br><small>第 4 條</small></td><td>死刑或無期徒刑；無期徒刑得併科 3,000 萬元以下罰金</td><td>無期徒刑或 10 年以上，得併科 1,500 萬元</td><td>7 年以上，得併科 1,000 萬元</td><td>5–12 年，得併科 500 萬元</td></tr>
+        <tr><td>意圖販賣而持有<br><small>第 5 條</small></td><td>無期徒刑或 10 年以上，得併科 700 萬元</td><td>5 年以上，得併科 500 萬元</td><td>3–10 年，得併科 300 萬元</td><td>1–7 年，得併科 100 萬元</td></tr>
+        <tr><td>轉讓<br><small>第 8 條</small></td><td>1–7 年，得併科 100 萬元</td><td>6 月–5 年，得併科 70 萬元</td><td>3 年以下，得併科 30 萬元</td><td>1 年以下，得併科 10 萬元</td></tr>
+        <tr><td>施用<br><small>第 10、11-1 條</small></td><td>6 月–5 年</td><td>3 年以下</td><td colspan="2">行政罰：罰鍰 1–5 萬元，並接受 4–8 小時毒品危害講習</td></tr>
+        <tr><td>持有<br><small>第 11 條</small></td><td>3 年以下、拘役或 30 萬元；純質淨重 ≥10g：1–7 年</td><td>2 年以下、拘役或 20 萬元；純質淨重 ≥20g：6 月–5 年</td><td>純質淨重 ≥5g：2 年以下，得併科 20 萬元；未達者行政罰</td><td>純質淨重 ≥5g：1 年以下，得併科 10 萬元；未達者行政罰</td></tr>
+      </table></div>
+      <ul style="font-size:13px;margin-top:8px">
+        <li>製造、運輸、販賣「專供製造或施用毒品之器具」：1–7 年，得併科 150 萬元。</li>
+        <li>施用一、二級毒品者，先由法院裁定觀察、勒戒（不超過 2 個月）；有繼續施用傾向者強制戒治 6 個月以上、最長 1 年（第 20 條）。</li>
+        <li>罰金單位均為新臺幣。以上依全國法規資料庫「毒品危害防制條例」（民國 111 年 5 月 4 日修正）整理。</li>
+      </ul>
+    </div>
+    <div class="card"><h2>✈️ 通關提醒</h2>
+      <ul style="font-size:14px">
+        <li>毒品入出境即構成「運輸毒品」，刑度與製造、販賣相同，不因數量少或「幫人帶」而免責。</li>
+        <li>勿替陌生人攜帶行李或包裹，出國前確認自己的行李內容。</li>
+        <li>部分國家合法的大麻、CBD 產品，在台灣屬第二級毒品或管制藥品，不可攜帶入境。</li>
+        <li>自用管制藥品（安眠藥、止痛藥等）請保留原包裝，攜帶處方箋或診斷證明。</li>
+      </ul>
+    </div>
+  </section>
+
+  <div class="help">
+    <b>☎ 0800-770-885（請請你幫幫我）</b><br>戒毒成功專線，24 小時免付費。發現身邊有人使用毒品或需要戒癮協助，可撥打尋求專業協助。<br>
+    <a href="https://antidrug.moj.gov.tw/" target="_blank" rel="noopener">法務部反毒大本營 ↗</a>
+  </div>
+
+  <p class="note-box">資料來源：衛生福利部食品藥物管理署「常見濫用管制藥品資料集」、「銷售管制藥品一覽表」（政府資料開放平臺）；法務部反毒大本營「依毒品特性」；全國法規資料庫「毒品危害防制條例」、「管制藥品管理條例」。</p>
+  <p class="disclaimer" id="disc"></p>
+</div>
+
+<script src="data_west.js"></script>
+<script src="data_tcm.js"></script>
+<script src="data_disease.js"></script>
+<script src="data_drugs.js"></script>
+<script src="common.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+$("disc").innerHTML="本頁內容僅供認識與預防用途，不構成法律意見；實際適用以主管機關公告及法院判決為準。";
+const LV={1:"第一級",2:"第二級",3:"第三級",4:"第四級"};
+const lvTag=l=>l.length?l.map(n=>`<span class="lv lv${n}">${LV[n]}</span>`).join(""):`<span class="lv lv0">非毒品</span>`;
+
+// 分頁切換
+const tabs=$("tabs");
+function showTab(t){tabs.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));
+  document.querySelectorAll("section").forEach(s=>s.hidden=s.id!=="s-"+t);}
+tabs.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;showTab(b.dataset.t);history.replaceState(null,"","?tab="+b.dataset.t);});
+if(qs("tab"))showTab(qs("tab"));
+
+// 常見濫用物質
+let lv="全部",cat="全部",kw=qs("q")||"";
+const cats=["全部",...new Set(ABUSE.map(r=>r[0]))];
+function chips(el,list,cur,label){el.innerHTML=list.map(c=>`<button class="chip ${c===cur?"on":""}" data-c="${c}">${label?label(c):c}</button>`).join("");}
+function drawChips(){chips($("lvChips"),["全部","1","2","3","4","非毒品"],lv,c=>c==="全部"?"全部級別":LV[c]||c);chips($("catChips"),cats,cat);}
+$("lvChips").addEventListener("click",e=>{const b=e.target.closest(".chip");if(!b)return;lv=b.dataset.c;drawChips();draw();});
+$("catChips").addEventListener("click",e=>{const b=e.target.closest(".chip");if(!b)return;cat=b.dataset.c;drawChips();draw();});
+$("q").value=kw;$("q").addEventListener("input",e=>{kw=e.target.value;draw();});
+function draw(){
+  const k=norm(kw.trim());
+  const list=ABUSE.filter(r=>(lv==="全部"||(lv==="非毒品"?!r[4].length:r[4].includes(+lv)))&&(cat==="全部"||r[0]===cat)&&(!k||norm(r.join(" ")).includes(k)));
+  $("cnt").textContent=`共 ${list.length} 項`;
+  $("list").innerHTML=list.length?list.map(r=>`<details class="item"><summary><div>
+      <div class="t1">${esc(r[1])} ${lvTag(r[4])}</div><div class="t2">${esc(r[2])}｜俗名：${esc(r[3])}</div></div></summary>
+      <div class="body"><dl class="kv">
+        <dt>類別</dt><dd>${esc(r[0])}</dd><dt>俗名</dt><dd>${esc(r[3])}</dd>
+        <dt>醫療用途</dt><dd>${esc(r[5])}</dd><dt>濫用方式</dt><dd>${esc(r[6])}</dd>
+        <dt>危害</dt><dd style="color:var(--red)">${esc(r[7])}</dd></dl></div></details>`).join(""):`<div class="empty">找不到符合的項目</div>`;
+}
+drawChips();draw();
+
+// 醫療用管制藥品
+let cdl="全部";
+function drawCd(){
+  chips($("cdChips"),["全部","1","2","3"],cdl,c=>c==="全部"?"全部":LV[c]+"管制藥品");
+  const list=CD_FACTORY.filter(r=>cdl==="全部"||r[0]===cdl);
+  $("cdList").innerHTML=list.map(r=>`<details class="item"><summary><div>
+      <div class="t1">${esc(r[1])} <span class="lv lv${r[0]}">${LV[r[0]]}</span></div><div class="t2">${esc(r[3])}｜${esc(r[4].slice(0,30))}${r[4].length>30?"…":""}</div></div></summary>
+      <div class="body"><dl class="kv"><dt>英文名</dt><dd>${esc(r[2])}</dd><dt>主要成分</dt><dd>${esc(r[3])}</dd>
+      <dt>適應症</dt><dd>${esc(r[4])}</dd><dt>包裝</dt><dd>${esc(r[5])}</dd>
+      ${r[6]?`<dt>健保代碼</dt><dd>${esc(r[6])}</dd>`:""}</dl></div></details>`).join("");
+}
+$("cdChips").addEventListener("click",e=>{const b=e.target.closest(".chip");if(!b)return;cdl=b.dataset.c;drawCd();});
+drawCd();
+</script>
+</body>
+</html>

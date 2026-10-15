@@ -8,12 +8,14 @@
 | `disease.html` | 33 種常見疾病：居家處理、西藥、中醫辨證、藥典參考、就醫警訊（`?id=`） |
 | `westmed.html` | 40 種常用成藥／指示藥（`?id=`） |
 | `nhi.html` | 健保用藥品項：給付中口服與外用藥，依 ATC 分類、連食藥署仿單（`?atc=`、`?q=`） |
+| `drugs.html` | 毒品與管制藥品：常見濫用物質、分級、醫療用管制藥品、刑度（`?tab=abuse|level|cd|law`） |
 | `tcm.html` | 50 種台灣常見科學中藥方劑（`?id=`） |
+| `twp.html` | 臺灣中藥典第四版：中藥材、基準方 200 方、毒劇中藥（`?tab=herb|fang|tox`、`?id=藥材名`、`?no=方號`、`?d=疾病id`） |
 | `cpm.html` | 《中國藥典》2015 一部成方製劑（`?id=`、`?d=疾病id`、`?cat=`） |
 | `herbs.html` | 《中國藥典》2015 一部藥材與飲片（`?id=`、`?d=`） |
 | `knowledge.html` | 用藥知識（整理自課程共筆）：方劑分類、劑型、用藥安全、孕婦與毒性藥材 |
 
-資料檔：`data_disease.js`、`data_west.js`、`data_tcm.js`、`data_cpm.js`、`data_herb.js`、`data_nhi.js`
+資料檔：`data_disease.js`、`data_west.js`、`data_tcm.js`、`data_cpm.js`、`data_herb.js`、`data_nhi.js`、`data_drugs.js`、`data_twp.js`
 藥典資料由 OCR 擷取後簡轉繁，可能有少數誤字。
 
 本工具僅供日常輕症自我照護參考，不能取代醫師診斷與藥師指示。
